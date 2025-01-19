@@ -1,0 +1,9 @@
+version: "3"
+
+env:
+  version: v0.1
+
+tasks:
+  build:
+    cmds:
+      - docker build -t job-runner-frontend:$version .
