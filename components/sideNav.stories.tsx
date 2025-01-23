@@ -1,6 +1,11 @@
 import { Meta } from "@storybook/react"
 import SideNav from "./sideNav"
-import { UserGroupIcon, HomeIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline"
+import {
+  UserGroupIcon,
+  HomeIcon,
+  DocumentDuplicateIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline"
 import { HomeModernIcon } from "@heroicons/react/24/solid"
 
 export default {
@@ -16,6 +21,21 @@ export const Default = {
       { label: "User", href: "/about", icon: UserGroupIcon },
       { label: "Services", href: "/services", icon: DocumentDuplicateIcon },
       { label: "Contact", href: "/contact", icon: HomeModernIcon },
+      {
+        type: "accordion",
+        label: "Settings",
+        icon: Cog6ToothIcon,
+        items: [
+          {
+            href: "/",
+            label: "users",
+          },
+          {
+            href: "/site",
+            label: "site",
+          },
+        ],
+      },
     ],
   },
 }

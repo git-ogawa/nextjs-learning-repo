@@ -1,6 +1,6 @@
 export const exampleUserList = [
   {
-    id: "1",
+    id: 1,
     name: "admin",
     email: "admin@example.com",
     role: "Admin",
@@ -8,7 +8,7 @@ export const exampleUserList = [
     updatedAt: "2021-09-01T00:00:00Z",
   },
   {
-    id: "2",
+    id: 2,
     name: "developer",
     email: "developer@example.com",
     role: "Developer",
@@ -16,7 +16,7 @@ export const exampleUserList = [
     updatedAt: "2021-09-01T00:00:00Z",
   },
   {
-    id: "3",
+    id: 3,
     name: "local",
     email: "local@example.com",
     role: "Viewer",

@@ -1,7 +1,7 @@
 // app/api/auth/signin.ts
-import { NextApiRequest, NextApiResponse } from "next"
-import { signIn } from "next-auth/react"
+import type { NextApiRequest, NextApiResponse } from "next"
 import { AuthError } from "next-auth"
+import { signIn } from "next-auth/react"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -40,7 +40,6 @@ export async function authenticate(prevState: string | undefined, formData: Form
     return result
   } catch (error) {
     if (error instanceof AuthError) {
-      console.log("Error", error)
       switch (error.type) {
         case "CredentialsSignin":
           return "Invalid credentials."

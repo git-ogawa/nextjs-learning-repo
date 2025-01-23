@@ -7,6 +7,7 @@ import runnerReducer from "./runnerSlice"
 import currentUserReducer from "./currentUserSlice"
 import templateReducer from "./templateSlice"
 import tableReducer from "./tableSlice"
+import userReducer from "./userSlice"
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     currentUser: currentUserReducer,
     template: templateReducer,
     table: tableReducer,
+    user: userReducer,
   },
 })
 

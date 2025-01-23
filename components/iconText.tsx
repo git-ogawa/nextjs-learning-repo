@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef } from "react"
 
 type ButtonWithIconProps = {
   icon: string
-  text: string
+  text: stringz
   subMenuItems: string[]
 }
 
@@ -33,20 +33,27 @@ const ButtonWithIcon: React.FC<ButtonWithIconProps> = ({ icon, text, subMenuItem
   }, [])
 
   return (
-    <div className='absolute flex-none'>
+    <div className="absolute flex-none">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className='flex items-center hover hover:border-gray-300 focus:border focus:border-gray-300'
-        type='button'
-        data-dropdown-toggle='dropdown'
+        className="hover flex items-center hover:border-gray-300 focus:border focus:border-gray-300"
+        type="button"
+        data-dropdown-toggle="dropdown"
       >
-        {IconComponent && <IconComponent className='w-10 h-10 text-white' />}
-        <div className='dark:text-white text-xl px-2'>{text}</div>
+        {IconComponent && <IconComponent className="h-10 w-10 text-white" />}
+        <div className="px-2 text-xl dark:text-white">{text}</div>
       </button>
       {isOpen && (
-        <div ref={menuRef} className='fixed mt-1 w-48 bg-white border border-gray-300 rounded shadow-lg dark:bg-gray-700 dark:text-white'>
+        <div
+          ref={menuRef}
+          className="fixed mt-1 w-48 rounded border border-gray-300 bg-white shadow-lg dark:bg-gray-700 dark:text-white"
+        >
           {subMenuItems.map((item, index) => (
-            <Link key={index} href={item.href} className='inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'>
+            <Link
+              key={index}
+              href={item.href}
+              className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            >
               <span>{item.text}</span>
             </Link>
           ))}

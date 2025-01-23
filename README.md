@@ -15,7 +15,7 @@ github workflow のような CI/CD, ジョブランナーのようなプロダ�
 - next.js: 15
 - tailwind css
 - storybook
-
+- auth.js v5
 
 # Demo
 
@@ -28,3 +28,20 @@ https://nextjs-learning-repo.vercel.app/
     - password: `admin`
 - データはテスト用のものを使用。
 - dark mode での閲覧を推奨。
+
+
+# 参考
+
+開発にあたって参考にしたプロジェクト
+
+- harbor
+    - フロントエンドのデザイン、api 定義
+- awx
+- stackstorm
+    - job, template, runner のコンセプト、api 定義
+
+
+その他
+- aws
+- grafana
+- github, gitlab

@@ -8,9 +8,9 @@ interface currentUserState {
 const initialState: currentUserState = {
   currentUser: {
     id: 1,
-    name: "admin",
-    email: "admin",
-    role: "admin",
+    name: "",
+    email: "",
+    role: "",
   },
 }
 

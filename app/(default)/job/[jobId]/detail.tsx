@@ -1,22 +1,24 @@
 "use client"
-import { useState } from "react"
+import { cancelJob } from "@/app/api/v1.0/jobs/route"
+import type { Job } from "@/app/types/job"
+import Notification from "@/components/notification"
+import PopupModal from "@/components/popupModal"
+import Table from "@/components/table"
+import { getStatusIcon } from "@/components/ui/utils"
+import {} from "@heroicons/react/24/outline"
 import type { Monaco } from "@monaco-editor/react"
 import dynamic from "next/dynamic"
-import yaml from "js-yaml"
-import { getStatusIcon } from "@/components/ui/utils"
 import Link from "next/link"
-import PopupModal from "@/components/popupModal"
-import { postCancelJob } from "@/app/api/job"
-import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
-import { Job, JobApiResponse } from "@/app/types/job"
+import { useState } from "react"
 
 export default function JobDetail(res: { job: Job }) {
   const [showConfirm, setShowConfirm] = useState(false)
-  const [apiCallResult, setAPIResult] = useState<{
+  const [apiCallResult, setApiResult] = useState<{
     result: "success" | "error" | "none"
+    title: string
     message: string
-    additionalText?: string
-  }>({ result: "none", message: "", additionalText: "" })
+    isVisible: boolean
+  }>({ result: "none", title: "", message: "", isVisible: false })
 
   const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false })
 
@@ -24,14 +26,12 @@ export default function JobDetail(res: { job: Job }) {
     console.log("Monaco Editor is loading...", monaco)
   }
 
-  const job = res.job
-
   const handleCancelJob = () => {
     setShowConfirm(true)
   }
 
   const handleConfirmYes = async () => {
-    const res = await postCancelJob([job.jobId])
+    const res = await cancelJob(job.jobId)
     setShowConfirm(false)
     handleApiCall(res)
   }
@@ -40,60 +40,65 @@ export default function JobDetail(res: { job: Job }) {
     setShowConfirm(false)
   }
 
-  const handleApiCall = async (res: JobApiResponse) => {
-    setAPIResult({ result: "none", message: "", additionalText: "" })
+  const handleApiCall = async (res) => {
+    let result
+    let title
+    let message
 
-    switch (res.status) {
-      case "success":
-        setAPIResult({ result: "success", message: res.data.title, additionalText: res.data.body })
-        break
-      case "error":
-        setAPIResult({ result: "error", message: res.data.title, additionalText: res.data.body })
-        break
-      default:
-        setAPIResult({ result: "error", message: "", additionalText: "Unknown error" })
-        break
+    if (res) {
+      result = "success"
+      title = "Job successfully cancelled"
+      message = `Job Id ${job.jobId} has been cancelled`
+    } else {
+      result = "error"
+      title = "Failed to call API"
+      message = `error`
     }
-    setTimeout(() => {
-      setAPIResult({ result: "none", message: "", additionalText: "" })
-    }, 10000)
+
+    setApiResult({
+      result: result,
+      title: title,
+      message: message,
+      isVisible: true,
+    })
+    // setTimeout(() => {
+    //   setAPIResult({ isVisible: false })
+    // }, 10000)
   }
 
+  const handleNotificationClose = () => {
+    setApiResult({ isVisible: false })
+  }
+
+  const job = res.job
+  const header = [
+    {
+      displayLabel: "key",
+      label: "key",
+    },
+    {
+      displayLabel: "value",
+      label: "value",
+    },
+  ]
+
   return (
-    <div className='flex-none bg-gray-100 px-12 py-12 bg-gray-800'>
-      <h2 className='flex dark:text-white text-3xl py-6 font-bold'>{`Job > ${job.jobId}`}</h2>
+    <div className="flex-none bg-gray-800 px-12 py-12">
+      <h2 className="flex py-6 text-3xl font-bold dark:text-white">{`Job > ${job.jobId}`}</h2>
 
-      {apiCallResult.result === "success" && (
-        <div className='pb-4'>
-          <div className='w-full flex-grow rounded rounded-xl px-6 py-4 bg-green-600 '>
-            <div className='flex text-2xl font-bold text-gray-900 dark:text-white items-center gap-2'>
-              <CheckCircleIcon className='w-10 h-10 ' /> {apiCallResult.message}
-            </div>
-            <div className='text-xl py-2'>
-              <div className={`text-base font-semibold leading-relaxed  dark:text-white`}>{apiCallResult.additionalText}</div>
-            </div>
-          </div>
-        </div>
-      )}
+      <Notification
+        result={apiCallResult.result}
+        title={apiCallResult.title}
+        message={apiCallResult.message}
+        isVisible={apiCallResult.isVisible}
+        onClickClose={handleNotificationClose}
+      />
 
-      {apiCallResult.result === "error" && (
-        <div className='pb-4'>
-          <div className='w-full flex-grow rounded-xl px-6 py-4 bg-red-400 '>
-            <div className='flex text-2xl font-bold text-gray-900 dark:text-white items-center gap-2'>
-              <ExclamationTriangleIcon className='w-10 h-10 ' /> {apiCallResult.message}
-            </div>
-            <div className='text-xl py-2'>
-              <div className={`text-base font-semibold leading-relaxed  dark:text-white`}>{apiCallResult.additionalText}</div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className='flex justify-between items-center mb-4'>
-        <div className='flex gap-2 mr-auto '>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="mr-auto flex gap-2">
           <button
-            type='button'
-            className='inline-block rounded-3xl px-4 py-2 dark:bg-orange-400 dark:text-white font-bold  hover:dark:bg-orange-300'
+            type="button"
+            className="inline-block rounded-3xl px-4 py-2 font-bold dark:bg-orange-400 dark:text-white hover:dark:bg-orange-300"
             onClick={handleCancelJob}
           >
             Cancel
@@ -101,71 +106,80 @@ export default function JobDetail(res: { job: Job }) {
         </div>
       </div>
 
-      {showConfirm && <PopupModal text='Do you want to cancel the job?' open yesLabel='Yes' noLabel='No' onYes={handleConfirmYes} onNo={handleConfirmNo} />}
+      {showConfirm && (
+        <PopupModal
+          text="Do you want to cancel the job?"
+          open
+          yesLabel="Yes"
+          noLabel="No"
+          onYes={handleConfirmYes}
+          onNo={handleConfirmNo}
+        />
+      )}
 
-      <div className='flex-auto p-4 border border-white dark:text-white max-w-7xl'>
-        <h3 className='p-2 text-2xl font-bold'>Overview</h3>
-        <div className='grid grid-cols-5 gap-4 p-4'>
+      <div className="max-w-7xl flex-auto border border-white p-4 dark:text-white">
+        <h3 className="p-2 text-2xl font-bold">Overview</h3>
+        <div className="grid grid-cols-5 gap-4 p-4">
           <div>
-            <div className='font-bold text-lg'>Status</div>
-            <div className=''>
-              <div className='flex items-center'>
+            <div className="text-lg font-bold">Status</div>
+            <div className="">
+              <div className="flex items-center">
                 {getStatusIcon(job.status)} {job.status}
               </div>
             </div>
           </div>
           <div>
-            <div className='font-bold text-lg'>Template</div>
-            <div className=''>
-              <Link href={`/template/${job.template}`} className='inline-flex dark:text-blue-300 hover:underline'>
+            <div className="text-lg font-bold">Template</div>
+            <div className="">
+              <Link
+                href={`/template/${job.template}`}
+                className="inline-flex hover:underline dark:text-blue-300"
+              >
                 {job.template}
               </Link>
             </div>
           </div>
           <div>
-            <div className='font-bold text-lg'>Runner</div>
-            <div className=''>
-              <Link href={`/runner/${job.runner}`} className='inline-flex dark:text-blue-300 hover:underline'>
+            <div className="text-lg font-bold">Runner</div>
+            <div className="">
+              <Link
+                href={`/runner/${job.runner}`}
+                className="inline-flex hover:underline dark:text-blue-300"
+              >
                 {job.runner}
               </Link>
             </div>
           </div>
 
           <div>
-            <div className='font-bold text-lg'>Created at</div>
-            <div className=''>{job.createdAt}</div>
+            <div className="text-lg font-bold">Created at</div>
+            <div className="">{job.createdAt}</div>
           </div>
           <div>
-            <div className='font-bold text-lg'>Updated at</div>
-            <div className=''>{job.updatedAt}</div>
+            <div className="text-lg font-bold">Updated at</div>
+            <div className="">{job.updatedAt}</div>
           </div>
           <div></div>
           <div></div>
         </div>
       </div>
 
-      <h2 className='flex dark:text-white text-3xl py-6 font-bold'>Tags</h2>
+      <h2 className="flex py-6 text-3xl font-bold dark:text-white">Tags</h2>
 
-      <div className='flex-grow x p-4 border border-white max-w-7xl dark:text-white'>
-        <div>
-          {job.tags.map((item, index) => (
-            <div key={item.key} className='flex gap-2'>
-              {item.key} {item.value}
-            </div>
-          ))}
-        </div>
+      <div className="x max-w-7xl flex-grow dark:text-white">
+        <Table header={header} tableItem={job.tags} />
       </div>
 
-      <h2 className='flex dark:text-white text-3xl py-6 font-bold'>Output</h2>
+      <h2 className="flex py-6 text-3xl font-bold dark:text-white">Output</h2>
 
-      <div className='flex-grow x p-4 border border-white'>
+      <div className="x flex-grow border border-white p-4">
         <div style={{ height: "50vh" }}>
           <MonacoEditor
-            height='100%'
-            defaultLanguage='yaml'
-            value=''
+            height="100%"
+            defaultLanguage="yaml"
+            value=""
             beforeMount={handleEditorWillMount}
-            theme='vs-dark'
+            theme="vs-dark"
             options={{
               fontSize: 14,
               minimap: { enabled: false },

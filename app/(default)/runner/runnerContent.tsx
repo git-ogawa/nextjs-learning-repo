@@ -98,46 +98,57 @@ export default function RunnerContent() {
 
   return (
     <div>
-      <div className='flex-none bg-gray-100 px-12 py-6 bg-gray-800 text-white'>
-        <h2 className='flex dark:text-white text-3xl py-6 font-bold'>Runner</h2>
+      <div className="flex-none bg-gray-100 bg-gray-800 px-12 py-6 text-white">
+        <h2 className="flex py-6 text-3xl font-bold dark:text-white">Runner</h2>
       </div>
 
       {apiCallResult.result === "success" && (
-        <div className='px-12 pb-4'>
-          <div className='w-full flex-grow rounded rounded-xl px-6 py-4 bg-green-600 '>
-            <div className='flex text-2xl font-bold text-gray-900 dark:text-white items-center gap-2'>
-              <CheckCircleIcon className='w-10 h-10 ' /> {apiCallResult.message}
+        <div className="px-12 pb-4">
+          <div className="w-full flex-grow rounded rounded-xl bg-green-600 px-6 py-4">
+            <div className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white">
+              <CheckCircleIcon className="h-10 w-10" /> {apiCallResult.message}
             </div>
-            <div className='text-xl py-2'>
-              <div className={`text-base font-semibold leading-relaxed  dark:text-white`}>{apiCallResult.additionalText}</div>
+            <div className="py-2 text-xl">
+              <div className={`text-base font-semibold leading-relaxed dark:text-white`}>
+                {apiCallResult.additionalText}
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {apiCallResult.result === "error" && (
-        <div className='px-12 pb-4'>
-          <div className='w-full flex-grow rounded rounded-xl px-6 py-4 bg-red-400 '>
-            <div className='flex text-2xl font-bold text-gray-900 dark:text-white items-center gap-2'>
-              <ExclamationTriangleIcon className='w-10 h-10 ' /> {apiCallResult.message}
+        <div className="px-12 pb-4">
+          <div className="w-full flex-grow rounded rounded-xl bg-red-400 px-6 py-4">
+            <div className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white">
+              <ExclamationTriangleIcon className="h-10 w-10" /> {apiCallResult.message}
             </div>
-            <div className='text-xl py-2'>
-              <div className={`text-base font-semibold leading-relaxed  dark:text-white`}>{apiCallResult.additionalText}</div>
+            <div className="py-2 text-xl">
+              <div className={`text-base font-semibold leading-relaxed dark:text-white`}>
+                {apiCallResult.additionalText}
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className='flex-grow overflow-auto px-12'>
+      <div className="flex-grow overflow-auto px-12">
         {showConfirm && (
-          <PopupModal text='Do you want to deregister selected runners?' open yesLabel='Yes' noLabel='No' onYes={handleConfirmYes} onNo={handleConfirmNo} />
+          <PopupModal
+            text="Do you want to deregister selected runners?"
+            open
+            yesLabel="Yes"
+            noLabel="No"
+            onYes={handleConfirmYes}
+            onNo={handleConfirmNo}
+          />
         )}
 
-        <div className='flex justify-between items-center mb-4'>
-          <div className='flex gap-2 mr-auto'>
+        <div className="mb-4 flex items-center justify-between">
+          <div className="mr-auto flex gap-2">
             <button
-              type='button'
-              className='inline-block rounded rounded-3xl px-6 py-3 dark:bg-orange-400 dark:text-white font-bold  hover:dark:bg-orange-300'
+              type="button"
+              className="inline-block rounded-3xl px-6 py-3 font-bold dark:bg-orange-400 dark:text-white hover:dark:bg-orange-300"
               onClick={handleDeregisterRunner}
             >
               Deregister runners
@@ -147,7 +158,6 @@ export default function RunnerContent() {
               itemList={runnerCategories}
               isOpen={false}
               label={searchCategory}
-              placeholder={"test"}
               onItemSelect={handleSearchCategorySelect}
               onSearchTextChange={handleSearchTextChange}
             />

@@ -22,8 +22,11 @@ export const authConfig = {
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
-      const isOnDashboard = nextUrl.pathname.startsWith("/")
+      const isOnRootPage = nextUrl.pathname.startsWith("/")
       const isLoggedInPage = ["/login"].some((path) => nextUrl.pathname.startsWith(path))
+      const adminPages = ["/users", "/settings"]
+      const isAdminPage = adminPages.includes(nextUrl.pathname)
+
       if (isLoggedInPage) {
         if (isLoggedIn) {
           return false
@@ -31,11 +34,13 @@ export const authConfig = {
         }
         return true
       }
-      if (isOnDashboard) {
-        if (isLoggedIn) return true
+      if (isOnRootPage) {
+        if (isLoggedIn) {
+          return true
+        }
         return Response.redirect(new URL("/login", nextUrl)) // 未認証ユーザーをログインページにリダイレクト
       }
-      // return true
+      return true
     },
   },
   providers: [], // Add providers with an empty array for now

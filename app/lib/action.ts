@@ -6,7 +6,7 @@ import { AuthError } from "next-auth"
 export async function authenticate(prevState: string | undefined, formData: FormData) {
   try {
     await signIn("credentials", formData, {
-      redirect: true, // 認証成功時にリダイレクト
+      redirectTo: true, // 認証成功時にリダイレクト
       callbackUrl: "/", // リダイレクト先を指定
     })
   } catch (error) {

@@ -3,47 +3,52 @@ import Notification from "./notification"
 export default {
   title: "Notification",
   component: Notification,
-  argTypes: {
-    type: { control: "select", options: ["success", "error"] },
-    message: { control: "text" },
-    onClose: { action: "clicked" },
-  },
   tags: ["autodocs"],
 }
 
 export const Default = {
   args: {
-    type: "success",
+    result: "success",
+    title: "Success",
     message: "Successfully",
+    isVisible: true,
+    onClickClose: () => {},
+  },
+}
+
+export const Width60percent = {
+  args: {
+    result: "success",
+    title: "Success",
+    message: "Set width to w-3/5",
+    width: "w-3/5",
+    isVisible: true,
   },
 }
 
 export const Success = {
   args: {
-    type: "success",
-    message: "Successfully",
+    result: "success",
+    title: "Success",
+    message: "API call Success",
+    isVisible: true,
   },
 }
 
-export const Failed = {
+export const Error = {
   args: {
-    type: "error",
-    message: "Failed",
+    result: "error",
+    title: "Failed to call API",
+    message: "API call failed",
+    isVisible: true,
   },
 }
 
-export const JobCreateSuccess = {
+export const NoVisible = {
   args: {
-    type: "success",
-    message: "Successfully created job!",
-    additionalText: "Job ID: j12345",
-  },
-}
-
-export const JobCreateFailed = {
-  args: {
-    type: "error",
-    message: "Failed to creat job!",
-    additionalText: "error message xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    result: "error",
+    title: "Failed to call API",
+    message: "API call failed",
+    isVisible: false,
   },
 }

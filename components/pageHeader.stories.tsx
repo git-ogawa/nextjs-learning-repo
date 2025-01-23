@@ -5,6 +5,11 @@ export default {
   component: PageHeader,
   title: "Page/PageHeader",
   tags: ["autodocs"],
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 }
 
 export const Default = {
