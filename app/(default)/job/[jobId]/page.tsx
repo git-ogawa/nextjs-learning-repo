@@ -1,11 +1,9 @@
 "use client"
-
-import React from "react"
-import JobDetail from "./detail"
-import { notFound } from "next/navigation"
 import { getJob } from "@/app/api/job"
-import { Provider } from "react-redux"
 import { store } from "@/app/lib/store"
+import { notFound } from "next/navigation"
+import { Provider } from "react-redux"
+import JobDetail from "./detail"
 
 export default async function jobDetailPage({ params }: { params: Promise<{ jobId: string }> }) {
   const { jobId } = await params

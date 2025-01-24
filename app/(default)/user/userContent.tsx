@@ -1,15 +1,15 @@
 "use client"
-import React, { useState, useEffect } from "react"
-import { listUser, deleteUsers } from "@/app/api/v1.0/users/route"
+import { deleteUsers } from "@/app/api/v1.0/users/route"
+import { listUser } from "@/app/api/v1.0/users/route"
+import type { RootState } from "@/app/lib/store"
+import { filterUser, setSearchCategory, setUserList } from "@/app/lib/userSlice"
+import Notification from "@/components/notification"
 import PopupModal from "@/components/popupModal"
 import SearchBox from "@/components/searchBox"
-import { useSelector, useDispatch } from "react-redux"
-import { setUserList, setSearchCategory, filterUser } from "@/app/lib/userSlice"
-import { RootState } from "@/app/lib/store"
 import Table from "@/components/table"
 import Link from "next/link"
-import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/outline"
-import Notification from "@/components/notification"
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 export default function UserContent() {
   const [showConfirm, setShowConfirm] = useState(false)
@@ -31,20 +31,31 @@ export default function UserContent() {
   }
 
   const handleConfirmYes = async () => {
-    const userIds = selectedItem.map((user) => user.id)
-    const res = await deleteUsers(userIds)
-    setShowConfirm(false)
-    handleApiCall(res)
+    try {
+      const userIds = selectedItem.map((user) => user.id)
+      const res = await deleteUsers(userIds)
+      setShowConfirm(false)
+      handleApiCall(res)
+    } catch (error) {
+      console.error("Error deleting users:", error)
+      setApiResult({
+        result: "error",
+        title: "Error",
+        message: "Failed to delete users",
+        isVisible: true,
+      })
+      setShowConfirm(false)
+    }
   }
 
   const handleConfirmNo = () => {
     setShowConfirm(false)
   }
 
-  const handleApiCall = async (res) => {
-    let result
-    let title
-    let message
+  const handleApiCall = (res: DeleteUserResponse) => {
+    let result: "success" | "error"
+    let title: string
+    let message: string
 
     if (res.status) {
       result = "success"
@@ -94,7 +105,7 @@ export default function UserContent() {
   ]
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
         const res = await listUser()
         dispatch(setUserList(res))
@@ -102,8 +113,8 @@ export default function UserContent() {
         console.error("Failed to fetch users:", error)
       }
     }
-    fetchData().catch((error) => console.error("Failed to fetch users:", error))
-  }, [])
+    fetchData()
+  }, [dispatch])
 
   const handleSearchCategorySelect = (category: string) => {
     dispatch(setSearchCategory(category))
@@ -117,7 +128,7 @@ export default function UserContent() {
   return (
     <div>
       <div className="bg-gray-800 px-12 py-6 text-white">
-        <h2 className="flex py-6 text-3xl font-bold dark:text-white">User</h2>
+        <h2 className="flex py-6 font-bold text-3xl dark:text-white">User</h2>
 
         <Notification
           result={apiCallResult.result}

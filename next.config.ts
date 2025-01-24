@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     authInterrupts: true,
+    turbo: {
+      rules: {
+        "*.svg": {
+          loaders: ["@svgr/webpack"],
+          as: "*.js",
+        },
+      },
+    },
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     return config

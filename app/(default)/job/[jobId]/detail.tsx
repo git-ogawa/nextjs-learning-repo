@@ -84,7 +84,7 @@ export default function JobDetail(res: { job: Job }) {
 
   return (
     <div className="flex-none bg-gray-800 px-12 py-12">
-      <h2 className="flex py-6 text-3xl font-bold dark:text-white">{`Job > ${job.jobId}`}</h2>
+      <h2 className="flex py-6 font-bold text-3xl dark:text-white">{`Job > ${job.jobId}`}</h2>
 
       <Notification
         result={apiCallResult.result}
@@ -118,10 +118,10 @@ export default function JobDetail(res: { job: Job }) {
       )}
 
       <div className="max-w-7xl flex-auto border border-white p-4 dark:text-white">
-        <h3 className="p-2 text-2xl font-bold">Overview</h3>
+        <h3 className="p-2 font-bold text-2xl">Overview</h3>
         <div className="grid grid-cols-5 gap-4 p-4">
           <div>
-            <div className="text-lg font-bold">Status</div>
+            <div className="font-bold text-lg">Status</div>
             <div className="">
               <div className="flex items-center">
                 {getStatusIcon(job.status)} {job.status}
@@ -129,7 +129,7 @@ export default function JobDetail(res: { job: Job }) {
             </div>
           </div>
           <div>
-            <div className="text-lg font-bold">Template</div>
+            <div className="font-bold text-lg">Template</div>
             <div className="">
               <Link
                 href={`/template/${job.template}`}
@@ -140,7 +140,7 @@ export default function JobDetail(res: { job: Job }) {
             </div>
           </div>
           <div>
-            <div className="text-lg font-bold">Runner</div>
+            <div className="font-bold text-lg">Runner</div>
             <div className="">
               <Link
                 href={`/runner/${job.runner}`}
@@ -152,11 +152,11 @@ export default function JobDetail(res: { job: Job }) {
           </div>
 
           <div>
-            <div className="text-lg font-bold">Created at</div>
+            <div className="font-bold text-lg">Created at</div>
             <div className="">{job.createdAt}</div>
           </div>
           <div>
-            <div className="text-lg font-bold">Updated at</div>
+            <div className="font-bold text-lg">Updated at</div>
             <div className="">{job.updatedAt}</div>
           </div>
           <div></div>
@@ -164,13 +164,13 @@ export default function JobDetail(res: { job: Job }) {
         </div>
       </div>
 
-      <h2 className="flex py-6 text-3xl font-bold dark:text-white">Tags</h2>
+      <h2 className="flex py-6 font-bold text-3xl dark:text-white">Tags</h2>
 
       <div className="x max-w-7xl flex-grow dark:text-white">
         <Table header={header} tableItem={job.tags} />
       </div>
 
-      <h2 className="flex py-6 text-3xl font-bold dark:text-white">Output</h2>
+      <h2 className="flex py-6 font-bold text-3xl dark:text-white">Output</h2>
 
       <div className="x flex-grow border border-white p-4">
         <div style={{ height: "50vh" }}>

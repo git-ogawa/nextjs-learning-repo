@@ -3,8 +3,6 @@ import PageHeader from "@/components/pageHeader"
 import SideNav from "@/components/sideNav"
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // const user = await getCurrentUser()
-
   return (
     <html lang="en">
       <head>

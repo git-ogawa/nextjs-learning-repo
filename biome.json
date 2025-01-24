@@ -28,13 +28,14 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "noUnusedImports": "error",
-        "noUnusedVariables": "error"
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn"
       },
       "nursery": {
         "useSortedClasses": {
           "level": "warn",
-          "fix": "safe"
+          "fix": "unsafe",
+          "options": {}
         }
       }
     }

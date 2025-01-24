@@ -22,3 +22,11 @@ export type APIErrorDetail = {
   errorCode: string
   message: string
 }
+
+export type DeleteUserResponse = {
+  status: boolean
+  data?: {
+    body: string
+  }
+  error?: APIErrorDetail
+}

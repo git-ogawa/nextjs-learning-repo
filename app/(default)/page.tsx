@@ -1,50 +1,42 @@
 import { listJob } from "@/app/api/job"
 import { listRunner } from "@/app/api/runner"
 import { listTemplate } from "@/app/api/template"
+import { calculateStatusTotal } from "@/app/lib/utils"
 import { auth } from "@/auth"
-import { ArrowRightIcon } from "@heroicons/react/24/outline"
-import Image from "next/image"
-import Link from "next/link"
+import CustomPieChart from "@/components/customPieChart"
 
 export default async function Page() {
   const jobList = await listJob()
   const runnerList = await listRunner()
   const templateList = await listTemplate()
 
+  const jobTotal = calculateStatusTotal(jobList)
+  const runnerTotal = calculateStatusTotal(runnerList)
+
   const session = await auth()
 
   return (
     <main className="flex min-h-screen flex-col px-12">
-      <div className="py-6 bg-gray-800 text-white">
-        <h2 className="flex dark:text-white text-3xl py-6 font-bold">
+      <div className="bg-gray-800 py-6 text-white">
+        <h2 className="flex py-6 font-bold text-3xl dark:text-white">
           Welcome {session.user.name}
         </h2>
       </div>
 
-      <div className="mt-4 flex flex-col gap-4 md:flex-row dark:text-white">
-        <div className="flex flex-col gap-6 rounded-lg py-10 md:w-2/5 md:px-20 border border-white">
-          <div className="basis-1/3">
-            <h2 className="flex text-3xl font-bold">Job</h2>
-          </div>
-          <div className="basis-2/3">
-            <h3 className="flex text-3xl ">Total job: {jobList.length}</h3>
-          </div>
+      <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="flex flex-col rounded-lg border border-white px-6 py-10">
+          <h2 className="flex font-bold text-3xl dark:text-white">Job</h2>
+          <CustomPieChart data={jobTotal} />
         </div>
-        <div className="flex flex-col gap-6 rounded-lg py-10 md:w-2/5 md:px-20 border border-white">
-          <div className="basis-1/3">
-            <h2 className="flex text-3xl font-bold">Template</h2>
-          </div>
-          <div className="basis-2/3">
-            <h3 className="flex text-3xl ">Total template: {templateList.length}</h3>
-          </div>
+        <div className="flex flex-col rounded-lg border border-white px-6 py-10">
+          <h2 className="flex font-bold text-3xl dark:text-white">Runner</h2>
+          <CustomPieChart data={runnerTotal} />
         </div>
-        <div className="flex flex-col gap-6 rounded-lg py-10 md:w-2/5 md:px-20 border border-white">
-          <div className="basis-1/3">
-            <h2 className="flex text-3xl font-bold">Runner</h2>
-          </div>
-          <div className="basis-2/3">
-            <h3 className="flex text-3xl ">Total runner: {runnerList.length}</h3>
-          </div>
+        <div className="flex flex-col rounded-lg border border-white px-6 py-10">
+          <h2 className="flex font-bold text-3xl dark:text-white">Template</h2>
+          <h3 className="flex mt-2 text-3xl dark:text-white">
+            Total template: {templateList.length}
+          </h3>
         </div>
       </div>
     </main>

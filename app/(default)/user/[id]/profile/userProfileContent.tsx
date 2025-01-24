@@ -1,12 +1,9 @@
 "use client"
-import Link from "next/link"
-import React, { useState, useEffect } from "react"
-import { User } from "@/app/types/user"
 import Notification from "@/components/notification"
 import PopupModal from "@/components/popupModal"
-import { updateUser } from "@/app/api/v1.0/users/route"
+import { useState } from "react"
 
-export default function UserProfileContent({ user: user }) {
+export default function UserProfileContent({ user }) {
   const [showConfirm, setShowConfirm] = useState(false)
   const [apiCallResult, setAPIResult] = useState<{
     result: "success" | "error" | "none"
@@ -141,51 +138,6 @@ export default function UserProfileContent({ user: user }) {
               Update
             </button>
           </form>
-
-          {/* <form>
-            <div className="mb-5">
-              <label
-                htmlFor="large-input"
-                className="mb-2 block text-2xl font-medium text-gray-900 dark:text-white"
-              >
-                Template
-              </label>
-
-              <select
-                id="dropdown"
-                aria-label="Select job template"
-                className="w-full max-w-fit rounded-md border px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                value={jobTemplate}
-                onChange={handleChange}
-              >
-                <option value="" disabled>
-                  Choose a template
-                </option>
-                {templateList.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </form>
-        </div>
-        <div className="flex items-start gap-4">
-          <button
-            type="button"
-            className="inline-block rounded rounded-3xl px-6 py-3 font-bold hover:bg-sky-400 dark:bg-sky-500 dark:text-white"
-            onClick={handleCreateJob}
-          >
-            Create
-          </button>
-          <Link href="/job">
-            <button
-              type="button"
-              className="inline-block rounded rounded-3xl px-6 py-3 font-bold dark:bg-orange-400 dark:text-white hover:dark:bg-orange-300"
-            >
-              Cancel
-            </button>
-          </Link> */}
         </div>
       </div>
     </div>

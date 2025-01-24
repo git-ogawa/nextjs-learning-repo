@@ -1,27 +1,15 @@
-"use client"
-
-import { signOut } from "@/auth"
-import { auth } from "@/auth"
 import { GithubIcon } from "@/components/ui/icon"
 import ProjectLogoSmall from "@/public/logo-tmp-128x128.png"
-import { UserCircleIcon } from "@heroicons/react/24/outline"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import Header from "./header"
-import Icon from "./icon"
-import IconText from "./iconText"
-import SubMenu from "./subMenu"
 import UserProfile from "./userProfile"
 
 export type PageHeaderProps = {
   bgColor: string
-  icon: ComponentType<SVGProps<SVGSVGElement>>
 }
 
-export default async function PageHeader({ bgColor = "", icon }: PageHeaderProps) {
-  const IconComponent = icon === "UserCircleIcon" ? UserCircleIcon : null
-
+export default async function PageHeader({ bgColor = "" }: PageHeaderProps) {
   return (
     <div className="relative h-full">
       <Header bgColor={bgColor} />
@@ -37,7 +25,7 @@ export default async function PageHeader({ bgColor = "", icon }: PageHeaderProps
         </div>
         <div className="flex w-2/5 items-center" />
         <div className="flex w-2/5">
-          <div className="flex items-center ml-auto">
+          <div className="ml-auto flex items-center">
             <Link
               href="https://github.com/git-ogawa/nextjs-learning-repo"
               className="flex items-center dark:text-white"

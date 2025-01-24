@@ -1,6 +1,5 @@
-import React from "react"
-import { forbidden } from "next/navigation"
 import { getCurrentUser } from "@/app/api/v1.0/users/get-session"
+import { forbidden } from "next/navigation"
 
 export default async function SettingsPage() {
   const user = await getCurrentUser()
